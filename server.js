@@ -16,7 +16,7 @@ app.get('/*', (req, res) => {
 });
 
 // Inicie o servidor
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 80;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
