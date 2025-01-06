@@ -25,9 +25,13 @@ process.on('unhandledRejection', (reason, promise) => {
     logMessage(`Unhandled Rejection at: ${promise}, reason: ${reason}`);
 });
 
-// Middleware para registrar todas as requisições
+// Middleware para capturar apenas erros nas rotas
 app.use((req, res, next) => {
-    logMessage(`Request: ${req.method} ${req.url}`);
+    res.on('finish', () => {
+        if (res.statusCode >= 400) { // Se o status for 400 ou superior (erro)
+            logMessage(`Error: ${req.method} ${req.url} - Status: ${res.statusCode}`);
+        }
+    });
     next();
 });
 
@@ -36,7 +40,12 @@ app.use(express.static(__dirname));
 
 // Rota para a página inicial
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'), (err) => {
+        if (err) {
+            logMessage(`Error serving file: /index.html - ${err.message}`);
+            res.status(404).send('File not found');
+        }
+    });
 });
 
 // Rota para servir qualquer arquivo HTML diretamente
