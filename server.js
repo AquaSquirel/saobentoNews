@@ -59,7 +59,7 @@ app.get('/*', (req, res) => {
 });
 
 // Inicie o servidor
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     logMessage(`Servidor rodando na porta ${PORT}`);
 });
